@@ -121,4 +121,4 @@ servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
 system = System(0.01, servo, encoderAndDisc, 12347)
 
-print(system.returnAngleForColor('N'))
+system.mainLoop();
