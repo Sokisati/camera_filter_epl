@@ -107,12 +107,15 @@ class System:
         self.socket.bind((self.stIp, self.stPort))
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
-        data = self.client_socket.recv(1024).decode()
-        print("Command received: "+str(data));
-        if len(data) == 4:
-             orderList = list(data)
-             self.filterProcedure(orderList)
-             exit()
+        print("Connected to satellite");
+
+        while True:
+            data = self.client_socket.recv(1024).decode()
+            if len(data) == 4:
+                 print("Command received: "+str(data)); 
+                 orderList = list(data)
+                 self.filterProcedure(orderList)
+                 exit()
         
 servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
