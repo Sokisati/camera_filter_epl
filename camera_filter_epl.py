@@ -54,12 +54,8 @@ class System:
         self.stIp = '192.168.33.225'
         self.stPort = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
-        self.socket.bind((self.stIp, self.stPort))
-        self.socket.listen(1)
-        self.client_socket, self.client_address = self.socket.accept()
-    
         print("Camera filter is ready and listening for incoming orders")
+    
     
     def returnAngleForColor(self, color):
         step = 0
@@ -106,7 +102,12 @@ class System:
         self.goToAngle(angleToTravel)
 
     def mainLoop(self):
+        self.socket.bind((self.stIp, self.stPort))
+        self.socket.listen(1)
+        
         while True:
+  
+            self.client_socket, self.client_address = self.socket.accept()
             data = self.client_socket.recv(1024).decode()
             if len(data) == 4:
                 orderList = list(data)
