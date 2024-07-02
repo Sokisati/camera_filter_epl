@@ -104,7 +104,7 @@ class System:
 
     def mainLoop(self):
         
-        self.socket.bind((self.stIp, self.stPort))
+        self.socket.bind(('', self.stPort))
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
         print("Connected to satellite");
