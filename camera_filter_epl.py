@@ -117,15 +117,13 @@ class System:
         try:
             while True:
                 data = self.client_socket.recv(1024).decode()
-                print("Command received: " + str(data))
                 if len(data) == 4:
                     orderList = list(data)
                     self.filterProcedure(orderList)
-                    break
+                    self.cleanup();
         except KeyboardInterrupt:
             print("Program interrupted")
-        finally:
-            self.cleanup()
+        
 
 servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
