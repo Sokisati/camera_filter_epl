@@ -57,7 +57,6 @@ class System:
         
         print("Camera filter is ready and listening for incoming orders")
     
-    
     def returnAngleForColor(self, color):
         step = 0
         listSize = len(self.colorList)
@@ -102,23 +101,34 @@ class System:
         angleToTravel = self.returnAngleForColor('N')  
         self.goToAngle(angleToTravel)
 
+    def cleanup(self):
+        self.client_socket.close()
+        self.socket.close()
+        GPIO.cleanup()
+        print("GPIO cleanup completed")
+        exit();
+
     def mainLoop(self):
-        
         self.socket.bind(('', self.stPort))
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
-        print("Connected to satellite");
+        print("Connected to satellite")
 
-        while True:
-            data = self.client_socket.recv(1024).decode()
-            if len(data) == 4:
-                 print("Command received: "+str(data)); 
-                 orderList = list(data)
-                 self.filterProcedure(orderList)
-                 exit()
-        
+        try:
+            while True:
+                data = self.client_socket.recv(1024).decode()
+                print("Command received: " + str(data))
+                if len(data) == 4:
+                    orderList = list(data)
+                    self.filterProcedure(orderList)
+                    break
+        except KeyboardInterrupt:
+            print("Program interrupted")
+        finally:
+            self.cleanup()
+
 servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
 system = System(0.01, servo, encoderAndDisc, 12347)
 
-system.mainLoop();
+system.mainLoop()
