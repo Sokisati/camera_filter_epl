@@ -117,7 +117,7 @@ class System:
         try:
             while True:
                 data = self.client_socket.recv(1024).decode()
-                if len(data) == 4:
+                if data != '0':
                     print("Command received");
                     orderList = list(data);
                     #self.filterProcedure(orderList);
