@@ -51,7 +51,7 @@ class System:
         self.colorList = ['N', 'B', 'G', 'R']
         self.filterIndex = 0
         
-        self.stIp = '192.168.33.225'
+        self.stIp = '127.0.0.1'
         self.stPort = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
@@ -118,13 +118,13 @@ class System:
             while True:
                 data = self.client_socket.recv(1024).decode()
                 if len(data) == 4:
-                    orderList = list(data)
-                    self.filterProcedure(orderList)
+                    print("Command received");
+                    orderList = list(data);
+                    #self.filterProcedure(orderList);
                     self.cleanup();
         except KeyboardInterrupt:
             print("Program interrupted")
         
-
 servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
 system = System(0.01, servo, encoderAndDisc, 12347)
