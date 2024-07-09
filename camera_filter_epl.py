@@ -124,6 +124,9 @@ class System:
                     self.cleanup();
         except KeyboardInterrupt:
             print("Program interrupted")
+        finally:
+            self.cleanup();
+            
         
 servo = Servo(5, 30)
 encoderAndDisc = EncoderAndDisc(5, 8)
