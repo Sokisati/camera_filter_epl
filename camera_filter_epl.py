@@ -121,7 +121,6 @@ class System:
                     print("Command received");
                     orderList = list(data);
                     #self.filterProcedure(orderList);
-                    self.cleanup();
         except KeyboardInterrupt:
             print("Program interrupted")
         finally:
