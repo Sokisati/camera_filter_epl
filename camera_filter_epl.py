@@ -1,3 +1,4 @@
+from genericpath import samefile
 from gpiozero import AngularServo
 import RPi.GPIO as GPIO
 import time
@@ -113,18 +114,19 @@ class System:
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
         print("Connected to satellite")
-
-        try:
-            while True:
+    
+        while True:
+            try:
                 data = self.client_socket.recv(1024).decode()
                 if data != '0':
                     print("Command received");
                     orderList = list(data);
                     #self.filterProcedure(orderList);
-        except KeyboardInterrupt:
-            print("Program interrupted")
-        finally:
-            self.cleanup();
+                    self.cleanup();
+            except KeyboardInterrupt:
+                print("Program interrupted")
+            finally:
+                self.cleanup();
             
         
 servo = Servo(5, 30)
