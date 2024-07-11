@@ -128,8 +128,8 @@ class System:
             finally:
                 self.cleanup();
                   
-servo = Servo(5, 30);
-encoderAndDisc = EncoderAndDisc(5, 8);
-system = System(0.01, servo, encoderAndDisc, 12347);
+servo = Servo(pwmPin=5,speed=30);
+encoderAndDisc = EncoderAndDisc(inputPin=5,stepCountOnDisc=8);
+system = System(delayBetweenStep=0.01,servo=servo, encoderAndDisc=encoderAndDisc,port=12347);
 
 system.mainLoop();
