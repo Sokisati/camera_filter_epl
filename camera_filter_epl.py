@@ -139,7 +139,7 @@ class System:
                 self.cleanup()
                   
 servo = Servo(pwmPin=13, speed=30)
-encoderAndDisc = EncoderAndDisc(inputPin=5, stepCountOnDisc=8)
+encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
 system.servo.testMotor(5)
