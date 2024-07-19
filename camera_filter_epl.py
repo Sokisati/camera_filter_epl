@@ -6,8 +6,7 @@ import socket
 
 class Servo:
     def __init__(self, pwmPin, speed):
-        self.servo = AngularServo(18, min_angle=0, max_angle=180, min_pulse_width=0.0005, max_pulse_width=0.0025);
-        self.pwmPin = pwmPin;
+        self.servo = AngularServo(pwmPin, min_angle=0, max_angle=180, min_pulse_width=0.0005, max_pulse_width=0.0025);
         self.speed = 90 + speed;
    
     def testMotor(self, forSecond):
@@ -128,8 +127,8 @@ class System:
             finally:
                 self.cleanup();
                   
-servo = Servo(pwmPin=5,speed=30);
+servo = Servo(pwmPin=13,speed=30);
 encoderAndDisc = EncoderAndDisc(inputPin=5,stepCountOnDisc=8);
 system = System(delayBetweenStep=0.01,servo=servo, encoderAndDisc=encoderAndDisc,port=12347);
 
-system.mainLoop();
+system.servo.testMotor(5);
