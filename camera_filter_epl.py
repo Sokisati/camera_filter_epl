@@ -32,7 +32,7 @@ class EncoderAndDisc:
         self.stepCountOnDisc = stepCountOnDisc
         
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.inputPin, GPIO.IN)
+        GPIO.setup(inputPin, GPIO.IN,GPIO.PUD_DOWN)
     
     def angleToStep(self, angle):
         return angle / (360 / self.stepCountOnDisc)
@@ -48,6 +48,10 @@ class EncoderAndDisc:
             pass
         while GPIO.input(self.inputPin) == 0:
             pass
+        
+    def printSignal(self):
+        while True:
+            print(GPIO.input(self.inputPin));
 
 class System:
     def __init__(self, delayBetweenStep, servo, encoderAndDisc, port):
@@ -142,4 +146,4 @@ servo = Servo(pwmPin=13, speed=30)
 encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
-system.servo.testMotor(5)
+system.driveMotorUntilSignalLH();
