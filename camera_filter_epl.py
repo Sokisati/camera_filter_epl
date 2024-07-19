@@ -82,6 +82,11 @@ class System:
         self.encoderAndDisc.waitForHighToLow()
         self.servo.stopMotor()
         
+    def driveMotorUntilSignalLH(self):
+        self.servo.driveMotor()
+        self.encoderAndDisc.waitForLowToHigh()
+        self.servo.stopMotor()    
+        
     def goToAngle(self, angle):
         stepToTravel = self.encoderAndDisc.angleToStep(angle)
         self.servo.driveMotor()
