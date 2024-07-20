@@ -79,6 +79,7 @@ class System:
             i = (i + 1) % listSize
             if step > listSize:
                 break
+        print("NOT FOUND");    
         return None           
 
     def driveMotorUntilSignalHL(self):
@@ -146,4 +147,5 @@ servo = Servo(pwmPin=13, speed=30)
 encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
-system.driveMotorUntilSignalLH();
+orderList = ['6','G','4','B'];
+system.filterProcedure(orderList);
