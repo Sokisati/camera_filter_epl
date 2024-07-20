@@ -133,6 +133,7 @@ class System:
         exit()
 
     def mainLoop(self):
+        
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(('', self.stPort))
         self.socket.listen(1)
@@ -140,21 +141,21 @@ class System:
         print("Connected to satellite")
     
         while True:
-            try:
-                data = self.client_socket.recv(1024).decode()
-                if data != '0':
-                    print("Command received")
-                    orderList = list(json.loads(data))
-                    print(orderList);
-                    self.filterProcedure(orderList)
-                    self.cleanup()
-            except KeyboardInterrupt:
-                print("Program interrupted")
-            finally:
+
+            data = self.client_socket.recv(1024).decode()
+            if data != '0':
+                print("Command received")
+                orderList = list(json.loads(data))
+                print(orderList);
+                self.encoderAndDisc.printSignal();    
+                self.filterProcedure(orderList)
                 self.cleanup()
+            self.cleanup()
                   
 servo = Servo(pwmPin=13, speed=30)
 encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
 system.mainLoop();
+#orderList = ['6','G','4','B'];
+#system.filterProcedure(orderList);
