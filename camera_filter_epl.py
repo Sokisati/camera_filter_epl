@@ -75,8 +75,8 @@ class System:
 
         while True:
             if self.colorList[i] == color:
-                return step * (360 / listSize)
                 self.filterIndex = i
+                return step * (360 / listSize)
             step += 1
             i = (i + 1) % listSize
             if step > listSize:
