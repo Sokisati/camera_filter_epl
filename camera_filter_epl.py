@@ -143,6 +143,7 @@ class System:
                 if data != '0':
                     print("Command received")
                     orderList = list(data)
+                    print(orderList);
                     self.filterProcedure(orderList)
                     self.cleanup()
             except KeyboardInterrupt:
