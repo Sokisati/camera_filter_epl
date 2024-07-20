@@ -75,11 +75,12 @@ class System:
         while True:
             if self.colorList[i] == color:
                 return step * (360 / listSize)
+                self.filterIndex = i
             step += 1
             i = (i + 1) % listSize
             if step > listSize:
                 break
-        print("NOT FOUND");    
+            
         return None           
 
     def driveMotorUntilSignalHL(self):
@@ -99,6 +100,7 @@ class System:
         for _ in range(int(stepToTravel)):  
             self.driveMotorUntilSignalHL()
             time.sleep(self.delayBetweenStep)
+        
         
         self.servo.stopMotor()
         
@@ -151,6 +153,4 @@ servo = Servo(pwmPin=13, speed=30)
 encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
-orderList = ['6','G','4','B'];
-#problem here
-system.filterProcedure(orderList);
+system.mainLoop();
