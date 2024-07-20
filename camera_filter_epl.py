@@ -132,6 +132,7 @@ class System:
         exit()
 
     def mainLoop(self):
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(('', self.stPort))
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
