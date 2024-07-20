@@ -118,6 +118,7 @@ class System:
 
         # back to neutral
         angleToTravel = self.returnAngleForColor('N')  
+        print(angleToTravel);
         self.goToAngle(angleToTravel)
 
     def cleanup(self):
