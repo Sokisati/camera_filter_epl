@@ -124,7 +124,8 @@ class System:
         self.goToAngle(angleToTravel)
 
     def cleanup(self):
-        self.client_socket.close()
+        if hasattr(self, 'client_socket'):
+            self.client_socket.close()
         self.socket.close()
         GPIO.cleanup()
         print("GPIO cleanup completed")
