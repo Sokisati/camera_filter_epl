@@ -144,7 +144,6 @@ class System:
         self.client_socket, self.client_address = self.socket.accept()
         print("Connected to satellite")
         self.encoderAndDisc.setup();
-        self.encoderAndDisc.printSignal();
 
         try:
             while True:
