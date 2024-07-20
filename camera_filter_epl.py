@@ -103,15 +103,18 @@ class System:
         self.servo.stopMotor()
         
     def filterProcedure(self, orderList):
+        
         # first color
         angleToTravel = self.returnAngleForColor(orderList[1])  
+        print(angleToTravel);
         self.goToAngle(angleToTravel)
-        time.sleep(orderList[0])
+        time.sleep(int(orderList[0]))
 
         # second color
         angleToTravel = self.returnAngleForColor(orderList[3])
+        print(angleToTravel);
         self.goToAngle(angleToTravel)
-        time.sleep(orderList[2])
+        time.sleep(int(orderList[2]))
 
         # back to neutral
         angleToTravel = self.returnAngleForColor('N')  
