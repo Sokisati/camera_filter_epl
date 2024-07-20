@@ -110,7 +110,10 @@ class System:
         self.servo.stopMotor()
         
     def filterProcedure(self, orderList):
-        
+
+        #I have no idea why but connecting to main flight program causes button pin to broke
+        self.encoderAndDisc.setup();        
+
         # first color
         angleToTravel = self.returnAngleForColor(orderList[1])  
         print(angleToTravel);
@@ -144,7 +147,6 @@ class System:
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
         print("Connected to satellite")
-        self.encoderAndDisc.setup();
 
         try:
             while True:
