@@ -127,6 +127,7 @@ class System:
         angleToTravel = self.returnAngleForColor('N')  
         print(angleToTravel);
         self.goToAngle(angleToTravel)
+        self.cleanup();
 
     def cleanup(self):
         if hasattr(self, 'client_socket'):
