@@ -104,14 +104,14 @@ class System:
         
     def filterProcedure(self, orderList):
         # first color
-        angleToTravel = self.returnAngleForColor(orderList[0])  
+        angleToTravel = self.returnAngleForColor(orderList[1])  
         self.goToAngle(angleToTravel)
-        time.sleep(orderList[1])
+        time.sleep(orderList[0])
 
         # second color
-        angleToTravel = self.returnAngleForColor(orderList[2])
+        angleToTravel = self.returnAngleForColor(orderList[3])
         self.goToAngle(angleToTravel)
-        time.sleep(orderList[3])
+        time.sleep(orderList[2])
 
         # back to neutral
         angleToTravel = self.returnAngleForColor('N')  
