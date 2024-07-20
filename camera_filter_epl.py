@@ -2,6 +2,7 @@ from gpiozero import PWMOutputDevice
 import RPi.GPIO as GPIO
 import time
 import socket
+import json
 
 class Servo:
     def __init__(self, pwmPin, speed):
@@ -143,7 +144,7 @@ class System:
                 data = self.client_socket.recv(1024).decode()
                 if data != '0':
                     print("Command received")
-                    orderList = list(data)
+                    orderList = list(json.loads(data))
                     print(orderList);
                     self.filterProcedure(orderList)
                     self.cleanup()
