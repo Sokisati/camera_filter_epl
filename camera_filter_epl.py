@@ -28,12 +28,16 @@ class Servo:
         return (angle / 180) * (0.1) + 0.02
 
 class EncoderAndDisc:
+
+    
     def __init__(self, inputPin, stepCountOnDisc):
         self.inputPin = inputPin
         self.stepCountOnDisc = stepCountOnDisc
         
+        
+    def setup(self):
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(inputPin, GPIO.IN,GPIO.PUD_DOWN)
+        GPIO.setup(self.inputPin, GPIO.IN,GPIO.PUD_DOWN)
     
     def angleToStep(self, angle):
         return angle / (360 / self.stepCountOnDisc)
@@ -133,11 +137,14 @@ class System:
         exit()
 
     def mainLoop(self):
+        
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(('', self.stPort))
         self.socket.listen(1)
         self.client_socket, self.client_address = self.socket.accept()
         print("Connected to satellite")
+        self.encoderAndDisc.setup();
+        self.encoderAndDisc.printSignal();
 
         try:
             while True:
