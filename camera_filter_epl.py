@@ -150,7 +150,6 @@ class System:
                 self.encoderAndDisc.printSignal();    
                 self.filterProcedure(orderList)
                 self.cleanup()
-            self.cleanup()
                   
 servo = Servo(pwmPin=13, speed=30)
 encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
