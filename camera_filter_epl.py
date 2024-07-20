@@ -148,4 +148,5 @@ encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
 system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
 
 orderList = ['6','G','4','B'];
+#problem here
 system.filterProcedure(orderList);
