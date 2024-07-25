@@ -152,7 +152,7 @@ direction = 1
 
 numberOfArgs = len(sys.argv)
 
-if sys.argv[1]>25 or (not isInt(sys.argv[1])) or numberOfArgs>4:
+if numberOfArgs<2 or sys.argv[1]>25 or (not isInt(sys.argv[1])) or numberOfArgs>4:
     warnAndExit();
 
 
