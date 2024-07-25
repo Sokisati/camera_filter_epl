@@ -42,8 +42,8 @@ class Servo:
         self.servo.angle = self.speed
     
     def stopMotor(self):
-        #self.servo.angle = self.stopAngle
-        GPIO.output(self.pwmPin, GPIO.LOW)
+        self.servo.angle = self.stopAngle
+      
 
 class EncoderAndDisc:
 
