@@ -30,7 +30,7 @@ class Servo:
         self.factory = PiGPIOFactory()
         self.speed = 90 + speed
         self.servo = AngularServo(pwmPin, min_angle=0, max_angle=180, pin_factory=self.factory)
-        self.stopAngle = 94
+        self.stopAngle = 86
 
     def testMotor(self, forSecond):
         self.servo.angle = self.speed
@@ -41,7 +41,8 @@ class Servo:
         self.servo.angle = self.speed
     
     def stopMotor(self):
-        self.servo.angle = self.stopAngle
+        #self.servo.angle = self.stopAngle
+        GPIO.output(self.pwmPin, GPIO.LOW)
 
 class EncoderAndDisc:
 
