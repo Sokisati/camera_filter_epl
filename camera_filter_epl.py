@@ -4,7 +4,6 @@ import time
 import socket
 import json
 
-
 #change what you need here.
 #comment/uncomment in main to debug.
 #don't mess around with other stuff! if you really-really need to, call or text me.
@@ -41,6 +40,7 @@ class Servo:
     
     def stopMotor(self):
         self.servo.value = 0  
+        time.sleep(0.1)
 
     def _calculateDutyCycle(self, angle):
 
@@ -198,8 +198,16 @@ system = System(delayBetweenStep, servo, encoderAndDisc,
                 portToListen,highToLow,initialDrive,plusStep)
 
 #system.mainLoop();
+system.servo.driveMotor();
+time.sleep(2);
+system.servo.stopMotor();
+time.sleep(2);
 
-orderList = ['6','G','4','B'];
-system.filterProcedure(orderList);
+system.servo.driveMotor();
+time.sleep(2);
+system.servo.stopMotor();
+time.sleep(2);
+#orderList = ['6','G','4','B'];
+#system.filterProcedure(orderList);
 
 #system.encoderAndDisc.printSignal();
