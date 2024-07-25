@@ -152,8 +152,9 @@ direction = 1
 
 numberOfArgs = len(sys.argv)
 
-if numberOfArgs<2 or (not isInt(sys.argv[1])) or sys.argv[1]>25 or numberOfArgs>4:
+if numberOfArgs < 2 or not isInt(sys.argv[1]) or int(sys.argv[1]) > 25 or numberOfArgs > 4:
     warnAndExit();
+
 
 
 stepToTravel = sys.argv[1]
