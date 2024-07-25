@@ -159,7 +159,7 @@ for i in range(1, numberOfArgs):
         warnAndExit()  
 
 
-if numberOfArgs<2 or (not isInt(sys.argv[1])) or sys.argv[1]>25 or numberOfArgs>4:
+if numberOfArgs<2 or sys.argv[1]>25 or numberOfArgs>4:
     warnAndExit();
 
 
