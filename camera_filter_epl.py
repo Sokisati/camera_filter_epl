@@ -196,15 +196,7 @@ system = System(delayBetweenStep, servo, encoderAndDisc,
                 portToListen,highToLow,initialDrive,plusStep)
 
 #system.mainLoop();
-system.servo.driveMotor();
-time.sleep(2);
-system.servo.stopMotor();
-time.sleep(2);
-
-system.servo.driveMotor();
-time.sleep(2);
-system.servo.stopMotor();
-time.sleep(2);
+system.servo.testMotor(3);
 
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
