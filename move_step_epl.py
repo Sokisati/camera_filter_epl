@@ -10,7 +10,7 @@ import sys
 servoPWMPin = 13
 servoSpeed = 35
         
-encoderInputPin = 12
+encoderInputPin = 6
 stepCountOnDisc = 8
         
 delayBetweenStep = 0.01
@@ -152,7 +152,7 @@ direction = 1
 
 numberOfArgs = len(sys.argv)
 
-if numberOfArgs<2 or sys.argv[1]>25 or (not isInt(sys.argv[1])) or numberOfArgs>4:
+if numberOfArgs<2 or (not isInt(sys.argv[1])) or sys.argv[1]>25 or numberOfArgs>4:
     warnAndExit();
 
 

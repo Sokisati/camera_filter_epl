@@ -11,7 +11,7 @@ import json
 servoPWMPin = 13
 servoSpeed = 35
         
-encoderInputPin = 12
+encoderInputPin = 6
 stepCountOnDisc = 8
         
 delayBetweenStep = 0.01
