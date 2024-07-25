@@ -127,7 +127,7 @@ class System:
             self.servo.driveMotor()
         
         for i in range(int(stepToTravel)+self.plusStep):  
-            print("step: "+str(i))
+            print("step: "+str(i+1))
             if self.highToLow:
                 self.driveMotorUntilSignalHL()
             else:
