@@ -4,9 +4,28 @@ import time
 import socket
 import json
 
+
+#change what you need here.
+#comment/uncomment in main to debug.
+#don't mess around with other stuff! if you really-really need to, call or text me.
+servoPWMPin = 13
+servoSpeed = 35
+        
+encoderInputPin = 12
+stepCountOnDisc = 8
+        
+delayBetweenStep = 0.01
+portToListen = 12347
+
+highToLow = True
+initialDrive = True
+plusStep = 0
+#plus step is supposed to be 0 if initial drive is true and 1 if initial drive is false
+#but I am not entirely sure, so it's there
+
+
 class Servo:
     def __init__(self, pwmPin, speed):
-
         self.servo = PWMOutputDevice(pwmPin, frequency=50) 
         self.speed = 90 + speed
         
@@ -29,12 +48,12 @@ class Servo:
 
 class EncoderAndDisc:
 
-    
     def __init__(self, inputPin, stepCountOnDisc):
         self.inputPin = inputPin
         self.stepCountOnDisc = stepCountOnDisc
-        
-        
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.inputPin, GPIO.IN,GPIO.PUD_DOWN)
+           
     def setup(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.inputPin, GPIO.IN,GPIO.PUD_DOWN)
@@ -59,12 +78,16 @@ class EncoderAndDisc:
             print(GPIO.input(self.inputPin));
 
 class System:
-    def __init__(self, delayBetweenStep, servo, encoderAndDisc, port):
+    def __init__(self, delayBetweenStep, servo, encoderAndDisc, port, highToLow,initialDrive,plusStep):
+        
         self.delayBetweenStep = delayBetweenStep
         self.servo = servo
         self.encoderAndDisc = encoderAndDisc
         self.colorList = ['N', 'B', 'G', 'R']
         self.filterIndex = 0
+        self.highToLow = highToLow
+        self.initialDrive = initialDrive
+        self.plusStep = plusStep
         
         self.stIp = '127.0.0.1'
         self.stPort = port
@@ -102,10 +125,14 @@ class System:
         stepToTravel = self.encoderAndDisc.angleToStep(angle)
         self.servo.driveMotor()
         
-        for _ in range(int(stepToTravel)):  
-            self.driveMotorUntilSignalHL()
+        for i in range(int(stepToTravel)+self.plusStep):  
+            print("step: "+str(i))
+            if self.highToLow:
+                self.driveMotorUntilSignalHL()
+            else:
+                self.driveMotorUntilSignalLH();
+            
             time.sleep(self.delayBetweenStep)
-        
         
         self.servo.stopMotor()
         
@@ -162,10 +189,16 @@ class System:
             self.cleanup()
 
                   
-servo = Servo(pwmPin=13, speed=30)
-encoderAndDisc = EncoderAndDisc(inputPin=12, stepCountOnDisc=8)
-system = System(delayBetweenStep=0.01, servo=servo, encoderAndDisc=encoderAndDisc, port=12347)
+servo = Servo(servoPWMPin, servoSpeed)
+
+encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc)
+
+system = System(delayBetweenStep, servo, encoderAndDisc,
+                portToListen,highToLow,initialDrive,plusStep)
 
 system.mainLoop();
+
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
+
+#system.encoderAndDisc.printSignal();
