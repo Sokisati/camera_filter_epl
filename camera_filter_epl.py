@@ -1,4 +1,6 @@
-from gpiozero import PWMOutputDevice
+from gpiozero import AngularServo
+from gpiozero.pins.pigpio import PiGPIOFactory
+
 import RPi.GPIO as GPIO
 import time
 import socket
@@ -25,26 +27,21 @@ plusStep = 0
 
 class Servo:
     def __init__(self, pwmPin, speed):
-        self.servo = PWMOutputDevice(pwmPin, frequency=50) 
+        self.factory = PiGPIOFactory()
         self.speed = 90 + speed
-        
-        self.servo.value = 0
+        self.servo = AngularServo(pwmPin, min_pulse_width=0.0006, max_pulse_width=0.0023, pin_factory=self.factory)
+        self.stopAngle = 94
 
     def testMotor(self, forSecond):
-        self.servo.value = self._calculateDutyCycle(self.speed)
+        self.servo.angle(self.speed)
         time.sleep(forSecond)
-        self.servo.value = self._calculateDutyCycle(90)  
+        self.servo.angle(self.stopAngle)
         
     def driveMotor(self):
-        self.servo.value = self._calculateDutyCycle(self.speed)
+        self.servo.angle(self.speed)
     
     def stopMotor(self):
-        self.servo.value = 0  
-        time.sleep(0.1)
-
-    def _calculateDutyCycle(self, angle):
-
-        return (angle / 180) * (0.1) + 0.02
+        self.servo.angle(self.stopAngle)  
 
 class EncoderAndDisc:
 
@@ -207,6 +204,7 @@ system.servo.driveMotor();
 time.sleep(2);
 system.servo.stopMotor();
 time.sleep(2);
+
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
 

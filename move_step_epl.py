@@ -1,4 +1,5 @@
-from gpiozero import PWMOutputDevice
+from gpiozero import AngularServo
+from gpiozero.pins.pigpio import PiGPIOFactory
 import RPi.GPIO as GPIO
 import time
 import sys
@@ -14,24 +15,22 @@ initialDrive = True
 plusStep = 0
 
 class Servo:
-    def __init__(self, pwmPin, speed, direction):
-        self.servo = PWMOutputDevice(pwmPin, frequency=50)
-        self.speed = 90 + (speed * direction)
-        self.servo.value = 0
+    def __init__(self, pwmPin, speed):
+        self.factory = PiGPIOFactory()
+        self.speed = 90 + speed
+        self.servo = AngularServo(pwmPin, min_pulse_width=0.0006, max_pulse_width=0.0023, pin_factory=self.factory)
+        self.stopAngle = 94
 
     def testMotor(self, forSecond):
-        self.servo.value = self._calculateDutyCycle(self.speed)
+        self.servo.angle(self.speed)
         time.sleep(forSecond)
-        self.servo.value = self._calculateDutyCycle(90)
-
+        self.servo.angle(self.stopAngle)
+        
     def driveMotor(self):
-        self.servo.value = self._calculateDutyCycle(self.speed)
-
+        self.servo.angle(self.speed)
+    
     def stopMotor(self):
-        self.servo.value = 0
-
-    def _calculateDutyCycle(self, angle):
-        return (angle / 180) * 0.1 + 0.02
+        self.servo.angle(self.stopAngle)
 
 class EncoderAndDisc:
     def __init__(self, inputPin, stepCountOnDisc):
