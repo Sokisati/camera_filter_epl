@@ -1,9 +1,8 @@
+from logging import warn
 from gpiozero import PWMOutputDevice
 import RPi.GPIO as GPIO
 import time
-import socket
-import json
-
+import sys
 
 #change what you need here.
 #comment/uncomment in main to debug.
@@ -15,7 +14,6 @@ encoderInputPin = 12
 stepCountOnDisc = 8
         
 delayBetweenStep = 0.01
-portToListen = 12347
 
 highToLow = True
 initialDrive = True
@@ -25,9 +23,9 @@ plusStep = 0
 
 
 class Servo:
-    def __init__(self, pwmPin, speed):
+    def __init__(self, pwmPin, speed,direction):
         self.servo = PWMOutputDevice(pwmPin, frequency=50) 
-        self.speed = 90 + speed
+        self.speed = 90 + (speed*direction)
         
         self.servo.value = 0
 
@@ -78,38 +76,15 @@ class EncoderAndDisc:
             print(GPIO.input(self.inputPin));
 
 class System:
-    def __init__(self, delayBetweenStep, servo, encoderAndDisc, port, highToLow,initialDrive,plusStep):
+    def __init__(self, delayBetweenStep, servo, encoderAndDisc, highToLow,initialDrive,plusStep):
         
         self.delayBetweenStep = delayBetweenStep
         self.servo = servo
         self.encoderAndDisc = encoderAndDisc
-        self.colorList = ['N', 'B', 'G', 'R']
-        self.filterIndex = 0
         self.highToLow = highToLow
         self.initialDrive = initialDrive
         self.plusStep = plusStep
-        
-        self.stIp = '127.0.0.1'
-        self.stPort = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
-        print("Camera filter is ready and listening for incoming orders")
-    
-    def returnAngleForColor(self, color):
-        step = 0
-        listSize = len(self.colorList)
-        i = self.filterIndex
 
-        while True:
-            if self.colorList[i] == color:
-                self.filterIndex = i
-                return step * (360 / listSize)
-            step += 1
-            i = (i + 1) % listSize
-            if step > listSize:
-                break
-            
-        return None           
 
     def driveMotorUntilSignalHL(self):
         self.servo.driveMotor()
@@ -123,7 +98,7 @@ class System:
         
     def goToAngle(self, angle):
         stepToTravel = self.encoderAndDisc.angleToStep(angle)
-        if self.initialDrive:
+        if initialDrive:
             self.servo.driveMotor()
         
         for i in range(int(stepToTravel)+self.plusStep):  
@@ -137,28 +112,22 @@ class System:
         
         self.servo.stopMotor()
         
-    def filterProcedure(self, orderList):
-
-        #I have no idea why but connecting to main flight program causes button pin to broke
-        self.encoderAndDisc.setup();        
-
-        # first color
-        angleToTravel = self.returnAngleForColor(orderList[1])  
-        print(angleToTravel);
-        self.goToAngle(angleToTravel)
-        time.sleep(int(orderList[0]))
-
-        # second color
-        angleToTravel = self.returnAngleForColor(orderList[3])
-        print(angleToTravel);
-        self.goToAngle(angleToTravel)
-        time.sleep(int(orderList[2]))
-
-        # back to neutral
-        angleToTravel = self.returnAngleForColor('N')  
-        print(angleToTravel);
-        self.goToAngle(angleToTravel)
-        self.cleanup();
+    def goFor(self,stepToTravel): 
+        
+        if initialDrive:
+            self.servo.driveMotor()
+        
+        for i in range(int(stepToTravel)+self.plusStep):  
+            print("step: "+str(i))
+            if self.highToLow:
+                self.driveMotorUntilSignalHL()
+            else:
+                self.driveMotorUntilSignalLH();
+            
+            time.sleep(self.delayBetweenStep)
+        
+        self.servo.stopMotor()
+        
 
     def cleanup(self):
         if hasattr(self, 'client_socket'):
@@ -168,36 +137,55 @@ class System:
         print("GPIO cleanup completed")
         exit()
 
-    def mainLoop(self):
-        
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socket.bind(('', self.stPort))
-        self.socket.listen(1)
-        self.client_socket, self.client_address = self.socket.accept()
-        print("Connected to satellite")
+def isInt(x):
+    try:
+        int(x)
+        return True
+    except ValueError:
+        return False
 
-        try:
-            while True:
-                data = self.client_socket.recv(1024).decode()
-                if data != 0 :
-                    print("Command received")
-                    orderList = list(json.loads(data))
-                    print(orderList)
-                    self.filterProcedure(orderList)
-        except KeyboardInterrupt:
-            print("Interrupted by user")
-        finally:
-            self.cleanup()
+def warnAndExit():
+    print("Stop trying to break the program.")
+    exit();
 
-                  
-servo = Servo(servoPWMPin, servoSpeed)
+direction = 1
+
+numberOfArgs = len(sys.argv)
+
+if sys.argv[1]>25 or (not isInt(sys.argv[1])) or numberOfArgs>4:
+    warnAndExit();
+
+
+stepToTravel = sys.argv[1]
+
+if numberOfArgs==3:
+    sys.argv[2]==direction
+    
+elif numberOfArgs==4:
+    sys.argv[2]==direction
+    sys.argv[3]==initialDrive
+    
+    if (sys.argv[3]!=0 or sys.argv[3]!=1):
+        warnAndExit();
+    else:
+        if sys.argv[3]==0:
+            initialDrive=False
+        else:
+            initialDrive=True
+    
+
+if (direction!=1 or direction!=-1):
+    warnAndExit();
+
+
+servo = Servo(servoPWMPin,servoSpeed,direction)
 
 encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc)
 
-system = System(delayBetweenStep, servo, encoderAndDisc,
-                portToListen,highToLow,initialDrive,plusStep)
+system = System(delayBetweenStep, servo, encoderAndDisc
+                ,highToLow,initialDrive,plusStep)
 
-system.mainLoop();
+system.goFor(stepToTravel)
 
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
