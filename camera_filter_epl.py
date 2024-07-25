@@ -35,7 +35,7 @@ class Servo:
     def testMotor(self, forSecond):
         self.servo.angle = self.speed
         time.sleep(forSecond)
-        self.servo.angle = self.stopAngle
+        self.stopMotor();
         
     def driveMotor(self):
         self.servo.angle = self.speed
