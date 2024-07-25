@@ -15,9 +15,9 @@ initialDrive = True
 plusStep = 0
 
 class Servo:
-    def __init__(self, pwmPin, speed):
+    def __init__(self, pwmPin, speed,direction):
         self.factory = PiGPIOFactory()
-        self.speed = 90 + speed
+        self.speed = 90 + (speed*direction)
         self.servo = AngularServo(pwmPin, min_angle=0, max_angle=180, pin_factory=self.factory)
         self.pwmPin = pwmPin
 
