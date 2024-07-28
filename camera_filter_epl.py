@@ -200,10 +200,11 @@ encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc)
 system = System(delayBetweenStep, servo, encoderAndDisc,
                 portToListen,highToLow,initialDrive,plusStep)
 
-#system.mainLoop();
+system.mainLoop();
+
 #system.servo.testMotor(3);
 
-orderList = ['6','G','4','B'];
-system.filterProcedure(orderList);
+#orderList = ['6','G','4','B'];
+#system.filterProcedure(orderList);
 
 #system.encoderAndDisc.printSignal();
