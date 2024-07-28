@@ -5,7 +5,7 @@ import time
 import sys
 
 # Configuration settings
-servoPWMPin = 13
+servoPWMPin = 12
 servoSpeed = 35
 encoderInputPin = 6
 stepCountOnDisc = 8
