@@ -31,6 +31,7 @@ class Servo:
         self.speed = 90 + speed
         self.servo = AngularServo(pwmPin, min_angle=0, max_angle=180, pin_factory=self.factory)
         self.pwmPin = pwmPin
+        self.servo.angle = None
 
     def testMotor(self, forSecond):
         self.servo.angle = self.speed
