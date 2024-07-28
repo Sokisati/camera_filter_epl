@@ -62,14 +62,18 @@ class EncoderAndDisc:
 
     def waitForHighToLow(self):
         while GPIO.input(self.inputPin) == 0:
+            time.sleep(0.001)
             pass
         while GPIO.input(self.inputPin) == 1:
+            time.sleep(0.001)
             pass
     
     def waitForLowToHigh(self):
         while GPIO.input(self.inputPin) == 1:
+            time.sleep(0.001)
             pass
         while GPIO.input(self.inputPin) == 0:
+            time.sleep(0.001)
             pass
         
     def printSignal(self):
