@@ -33,8 +33,11 @@ if len(sys.argv) == 4:
 servoSpeed *= direction
 
 servo = Servo(servoPWMPin, servoSpeed)
+
 encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc,delayForSignal)
-system = System(delayBetweenStep, servo, encoderAndDisc, highToLow, initialDrive,plusStep)
+
+system = System(delayBetweenStep, servo, encoderAndDisc,
+                portToListen,highToLow,initialDrive,plusStep)
 
 system.goFor(stepToTravel)
 
