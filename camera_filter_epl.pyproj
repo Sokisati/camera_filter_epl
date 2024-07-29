@@ -24,9 +24,7 @@
     <Compile Include="camera_filter_epl.py" />
     <Compile Include="module_file.py" />
     <Compile Include="move_step.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="readme.txt" />
+    <Compile Include="readme.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
