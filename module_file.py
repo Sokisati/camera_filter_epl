@@ -20,7 +20,7 @@ delayForSignal = 0.001 #1 millisecond
 portToListen = 12347
 
 highToLow = True
-initialDrive = False 
+initialDrive = True
 plusStep = 0
 
 class Servo:
