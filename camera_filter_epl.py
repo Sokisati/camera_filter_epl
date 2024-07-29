@@ -16,14 +16,12 @@ encoderInputPin = 6
 stepCountOnDisc = 8
         
 delayBetweenStep = 0.01
+delayForSignal = 0.001 #1 millisecond
 portToListen = 12347
 
 highToLow = True
-initialDrive = True
+initialDrive = False 
 plusStep = 0
-#plus step is supposed to be 0 if initial drive is true and 1 if initial drive is false
-#but I am not entirely sure, so it's there
-
 
 class Servo:
     def __init__(self, pwmPin, speed):
@@ -45,12 +43,12 @@ class Servo:
     def stopMotor(self):
         self.servo.angle = None
       
-
 class EncoderAndDisc:
 
-    def __init__(self, inputPin, stepCountOnDisc):
+    def __init__(self, inputPin, stepCountOnDisc,delayForSignal):
         self.inputPin = inputPin
         self.stepCountOnDisc = stepCountOnDisc
+        self.delayForSignal = delayForSignal
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.inputPin, GPIO.IN,GPIO.PUD_DOWN)
            
@@ -62,19 +60,21 @@ class EncoderAndDisc:
         return angle / (360 / self.stepCountOnDisc)
 
     def waitForHighToLow(self):
+        delay = self.delayForSignal #for performance
         while GPIO.input(self.inputPin) == 0:
-            time.sleep(0.001)
+            time.sleep(delay)
             pass
         while GPIO.input(self.inputPin) == 1:
-            time.sleep(0.001)
+            time.sleep(delay)
             pass
     
     def waitForLowToHigh(self):
+        delay = self.delayForSignal #for performance
         while GPIO.input(self.inputPin) == 1:
-            time.sleep(0.001)
+            time.sleep(delay)
             pass
         while GPIO.input(self.inputPin) == 0:
-            time.sleep(0.001)
+            time.sleep(delay)
             pass
         
     def printSignal(self):
@@ -127,15 +127,21 @@ class System:
         
     def goToAngle(self, angle):
         stepToTravel = self.encoderAndDisc.angleToStep(angle)
-        if self.initialDrive:
-            self.servo.driveMotor()
-        
+
         for i in range(int(stepToTravel)+self.plusStep):  
             print("step: "+str(i+1))
+            
             if self.highToLow:
-                self.driveMotorUntilSignalHL()
+                
+                if i==0 and (not self.initialDrive):
+                    self.encoderAndDisc.waitForHighToLow()
+                else:
+                    self.driveMotorUntilSignalHL()
             else:
-                self.driveMotorUntilSignalLH();
+                if i==0 and (not self.initialDrive):
+                    self.encoderAndDisc.waitForLowToHigh()
+                else:
+                    self.driveMotorUntilSignalLH()
             
             time.sleep(self.delayBetweenStep)
         
@@ -163,7 +169,28 @@ class System:
         print(angleToTravel);
         self.goToAngle(angleToTravel)
         self.cleanup();
+      
+    def goFor(self,stepToTravel):
 
+        for i in range(int(stepToTravel)+self.plusStep):  
+            print("step: "+str(i+1))
+            
+            if self.highToLow:
+                
+                if i==0 and (not self.initialDrive):
+                    self.encoderAndDisc.waitForHighToLow()
+                else:
+                    self.driveMotorUntilSignalHL()
+            else:
+                if i==0 and (not self.initialDrive):
+                    self.encoderAndDisc.waitForLowToHigh()
+                else:
+                    self.driveMotorUntilSignalLH()
+            
+            time.sleep(self.delayBetweenStep)
+        
+        self.servo.stopMotor() 
+        
     def cleanup(self):
         if hasattr(self, 'client_socket'):
             self.client_socket.close()
@@ -196,14 +223,12 @@ class System:
                   
 servo = Servo(servoPWMPin, servoSpeed)
 
-encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc)
+encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc,delayForSignal)
 
 system = System(delayBetweenStep, servo, encoderAndDisc,
                 portToListen,highToLow,initialDrive,plusStep)
 
 system.mainLoop();
-
-#system.servo.testMotor(3);
 
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
