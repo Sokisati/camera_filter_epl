@@ -37,7 +37,7 @@ servo = Servo(servoPWMPin, servoSpeed)
 encoderAndDisc = EncoderAndDisc(encoderInputPin, stepCountOnDisc,delayForSignal)
 
 system = System(delayBetweenStep, servo, encoderAndDisc,
-                portToListen,highToLow,initialDrive,plusStep)
+                portToListen,highToLow,initialDrive,plusStep,revertLastSignal)
 
 system.goFor(stepToTravel)
 

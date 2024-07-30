@@ -22,6 +22,7 @@ portToListen = 12347
 highToLow = True
 initialDrive = True
 plusStep = 0
+revertLastSignal = False
 
 class Servo:
     def __init__(self, pwmPin, speed):
@@ -82,7 +83,8 @@ class EncoderAndDisc:
             print(GPIO.input(self.inputPin));
 
 class System:
-    def __init__(self, delayBetweenStep, servo, encoderAndDisc, port, highToLow,initialDrive,plusStep):
+    def __init__(self, delayBetweenStep, servo, encoderAndDisc, port, highToLow,
+                 initialDrive,plusStep,revertLastSignal):
         
         self.delayBetweenStep = delayBetweenStep
         self.servo = servo
@@ -92,7 +94,8 @@ class System:
         self.highToLow = highToLow
         self.initialDrive = initialDrive
         self.plusStep = plusStep
-        
+        self.revertLastSignal = revertLastSignal        
+
         self.stIp = '127.0.0.1'
         self.stPort = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -129,21 +132,29 @@ class System:
     def goToAngle(self, angle):
         stepToTravel = self.encoderAndDisc.angleToStep(angle)
 
-        for i in range(int(stepToTravel)+self.plusStep):  
+        for i in range(int(stepToTravel)+self.plusStep): 
+            
             print("step: "+str(i+1))
             
             if self.highToLow:
                 
                 if i==0 and (not self.initialDrive):
                     self.encoderAndDisc.waitForHighToLow()
+                elif ( ((i+1)==(int(stepToTravel)+self.plusStep)) and self.revertLastSignal):
+                    self.driveMotorUntilSignalLH()
                 else:
                     self.driveMotorUntilSignalHL()
+                    
             else:
+                
                 if i==0 and (not self.initialDrive):
                     self.encoderAndDisc.waitForLowToHigh()
+                elif ( ((i+1)==(int(stepToTravel)+self.plusStep)) and self.revertLastSignal):
+                    self.driveMotorUntilSignalHL()
                 else:
                     self.driveMotorUntilSignalLH()
             
+
             time.sleep(self.delayBetweenStep)
         
         self.servo.stopMotor()
