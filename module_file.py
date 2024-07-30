@@ -184,24 +184,32 @@ class System:
       
     def goFor(self,stepToTravel):
 
-        for i in range(int(stepToTravel)+self.plusStep):  
+        for i in range(int(stepToTravel)+self.plusStep): 
+            
             print("step: "+str(i+1))
             
             if self.highToLow:
                 
                 if i==0 and (not self.initialDrive):
                     self.encoderAndDisc.waitForHighToLow()
+                elif ( ((i+1)==(int(stepToTravel)+self.plusStep)) and self.revertLastSignal):
+                    self.driveMotorUntilSignalLH()
                 else:
                     self.driveMotorUntilSignalHL()
+                    
             else:
+                
                 if i==0 and (not self.initialDrive):
                     self.encoderAndDisc.waitForLowToHigh()
+                elif ( ((i+1)==(int(stepToTravel)+self.plusStep)) and self.revertLastSignal):
+                    self.driveMotorUntilSignalHL()
                 else:
                     self.driveMotorUntilSignalLH()
             
+
             time.sleep(self.delayBetweenStep)
         
-        self.servo.stopMotor() 
+        self.servo.stopMotor()
         
     def cleanup(self):
         if hasattr(self, 'client_socket'):
