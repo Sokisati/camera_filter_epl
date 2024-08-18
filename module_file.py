@@ -9,10 +9,10 @@ import json
 #change what you need here.
 #comment/uncomment in main to debug.
 #don't mess around with other stuff! if you really-really need to, call or text me.
-servoPWMPin = 12
+servoPWMPin = 13
 servoSpeed = 25
         
-encoderInputPin = 6
+encoderInputPin = 22
 stepCountOnDisc = 8
         
 delayBetweenStep = 0.01
