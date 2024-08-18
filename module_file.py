@@ -10,12 +10,12 @@ import json
 #comment/uncomment in main to debug.
 #don't mess around with other stuff! if you really-really need to, call or text me.
 servoPWMPin = 13
-servoSpeed = 25
+servoSpeed = 30
         
 encoderInputPin = 22
-stepCountOnDisc = 8
+stepCountOnDisc = 12 #number of notches on disc
         
-delayBetweenStep = 0.01
+delayBetweenStep = 0.01 
 delayForSignal = 0.001 #1 millisecond
 portToListen = 12347
 
@@ -36,8 +36,7 @@ class Servo:
         self.servo.angle = self.speed
         time.sleep(forSecond)
         self.stopMotor();
-    
-        
+            
     def driveMotor(self):
         self.servo.angle = self.speed
     
