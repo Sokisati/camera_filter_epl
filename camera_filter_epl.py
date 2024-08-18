@@ -8,7 +8,7 @@ system = System(delayBetweenStep, servo, encoderAndDisc,
                 portToListen,highToLow,initialDrive,plusStep,revertLastSignal)
 
 system.mainLoop();
-system.servo.driveMotor();
+system.servo.stopMotor()
 #orderList = ['6','G','4','B'];
 #system.filterProcedure(orderList);
 
