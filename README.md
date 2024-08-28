@@ -9,7 +9,7 @@ Color code is a 4 digit string in this format:
 - 3rd digit: Number between [1-9]. This number indicates the duration of the second filters color's activation.
 - 4th digit: Letter that is either R, G or B. This Letter indicates the second filter color.
 
-![](https://github.com/Sokisati/camera_filter_epl/blob/master/pepe.gif)
+![](https://github.com/Sokisati/camera_filter_epl/blob/master/image/pepe.gif)
 
 For example, 6G4B means filer disc will travel to green color, wait for 6 seconds, travel to blue color, wait for 4 seconds and travel back to neutral color.
 
@@ -28,7 +28,7 @@ So I thought I can derive an equation based on rotation speed and time to rotate
 So I asked our teams mechanical guy to put some kind of a notch for every color and put a printer encoder, that way I can detect where filter is; it's essentialy a closed loop. 
 So I need to write a program to count the rising or falling edges and stop when it's the right color.
 
-![](https://github.com/Sokisati/camera_filter_epl/blob/master/disc_anim.gif)
+![](https://github.com/Sokisati/camera_filter_epl/blob/master/image/disc_anim.gif)
 
 # Angle to encoder counter
 Because it can only move in one direction (get out of my head music group), I need an algorithm to calculate how many encoder signal edge (rising xor falling) I need. It's super simple, it just iterates over a predefined color list, and when it finally finds the desired color it returns the number of steps it needed to find it.
