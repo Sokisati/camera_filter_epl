@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>d80fe555-f28b-4347-91b8-b8bf342bf171</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>camera_filter_epl.py</StartupFile>
+    <StartupFile>src\camera_filter_epl.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,10 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="camera_filter_epl.py" />
-    <Compile Include="module_file.py" />
-    <Compile Include="move_step.py" />
-    <Compile Include="readme.py" />
+    <Compile Include="src\camera_filter_epl.py" />
+    <Compile Include="src\module_file.py" />
+    <Compile Include="src\move_step.py" />
+    <Compile Include="src\readme.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
